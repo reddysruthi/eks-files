@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: frontend
+spec:
+  selector:
+    matchLabels:
+      app: frontend-webserver
+  template:
+    metadata:
+      labels:
+        app: frontend-webserver
+    spec:
+      containers:
+        - name: webserver
+          image: nginx:1.20.0
+          ports:
+            - containerPort: 80
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule

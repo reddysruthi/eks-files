@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-demo
+spec:
+  containers:
+    - name: busybox-demo
+      image: busybox
+      command: [ "/bin/sh", "-c", "printenv" ]
+      env: 
+        - name: DB_USERNAME
+          value: "admin"
+        - name: DB_ROOT_USER
+          valueFrom:
+            configMapKeyRef:
+              key: mysql_user_name
+              name: db-data
+        - name: DB_ROOT_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: mysql_root_password
+              name: db-data
+  restartPolicy: Never

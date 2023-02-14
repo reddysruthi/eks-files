@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: my-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:latest
+          commmand: ["/bin/sh"]
+          args: 
+            - -c
+            - mysqldump -hmysql.default -uroot -ptest123 --all-databases > /var/tmp/mysql_backup.sql
+          volumeMounts:
+            - name: dbbackup
+              mountPath: /var/tmp
+      volumes:
+        - name: dbbackup
+          nfs:
+            path: /var/backup
+            server: << NFS server >>
+      restartPolicy: Never    
+        

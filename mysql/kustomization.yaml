@@ -1,0 +1,11 @@
+secretGenerator:
+  - name: mysql-root-password
+  - name: mysql-db-url
+  - name: mysql-user
+  - name: mysql-user-password
+    literals:
+      - password=root
+      - database=mysql_db
+      - username=mysql
+      - userpassword=mysql@123
+

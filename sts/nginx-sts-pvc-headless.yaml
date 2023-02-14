@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sts-service
+  labels:
+    app: nginx
+spec:
+  ports:
+    - port: 80
+      name: demo
+  clusterIP: None
+  selector:
+    app: nginx
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sts-demo
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  serviceName: sts-service
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+              name: demo
+          volumeMounts:
+            - name: www-data
+              mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+    - metadata:
+        name: www-data
+      spec:
+        #storageClassName: ebs-sc
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 10Gi
+

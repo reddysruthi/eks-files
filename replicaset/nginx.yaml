@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-demo
+spec:
+  replicas: 3
+  selector:
+    matchExpressions:
+      - {key: app, operator: In, values: [test-app, dev]}
+  template:
+    metadata:
+      labels:
+        app: test-app
+        app: dev
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name:  nginx-data
+              mountPath: /usr/share/nginx/html/
+      volumes:
+        - name: nginx-data
+          emptyDir: {}              
